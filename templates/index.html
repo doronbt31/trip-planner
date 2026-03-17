@@ -272,7 +272,7 @@
         "grossarl": "#C9A84C"
       } %}
       {% set color = colors.get(leg.id, "#888888") %}
-      <a class="leg-card" href="/itinerary#leg-{{ leg.id }}">
+      <a class="leg-card" href="/itinerary#leg-{{ leg.id }}" data-filter-leg="{{ leg.id }}">
         <div class="leg-card-accent" style="background: {{ color }}"></div>
         <div class="leg-card-body">
           <div class="leg-type-badge">{{ leg.type | upper }}</div>
@@ -339,5 +339,6 @@
     }
   </script>
 
+  <script src="/static/js/family-filter.js"></script>
 </body>
 </html>

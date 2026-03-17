@@ -87,19 +87,19 @@
   </nav>
 
   <div class="legend">
-    <div class="legend-item">
+    <div class="legend-item" data-filter-leg="copenhagen_pre">
       <div class="legend-dot" style="background:#4a90d9"></div>
       Copenhagen (pre-cruise)
     </div>
-    <div class="legend-item">
+    <div class="legend-item" data-filter-leg="cruise">
       <div class="legend-dot" style="background:#f0a500"></div>
       MSC Euribia — Norway Fjords
     </div>
-    <div class="legend-item">
+    <div class="legend-item" data-filter-leg="austria_flachau">
       <div class="legend-dot" style="background:#3aaa5e"></div>
       Flachau, Austria
     </div>
-    <div class="legend-item">
+    <div class="legend-item" data-filter-leg="grossarl">
       <div class="legend-dot" style="background:#d4b06a"></div>
       Großarl — Kinderhotel
     </div>
@@ -109,5 +109,6 @@
     {{ map_html | safe }}
   </div>
 
+  <script src="/static/js/family-filter.js"></script>
 </body>
 </html>

@@ -252,7 +252,8 @@
     } %}
     <a class="leg-tab"
        href="#leg-{{ leg_id }}"
-       style="background: {{ leg_colors.get(leg_id, '#888') }}">
+       style="background: {{ leg_colors.get(leg_id, '#888') }}"
+       data-filter-leg="{{ leg_id }}">
       {{ leg_data.name }}
     </a>
     {% endfor %}
@@ -261,7 +262,7 @@
   <main>
     {% for leg_id, leg_data in gallery.items() %}
     {% set sections = leg_data.stops + leg_data.cruise_ports %}
-    <section class="leg-section" id="leg-{{ leg_id }}">
+    <section class="leg-section" id="leg-{{ leg_id }}" data-filter-leg="{{ leg_id }}">
       <h2 class="leg-title leg-{{ leg_id }}">{{ leg_data.name }}</h2>
 
       {% for section in sections %}
@@ -346,5 +347,6 @@
     });
   </script>
 
+  <script src="/static/js/family-filter.js"></script>
 </body>
 </html>

@@ -378,7 +378,8 @@
     {% for leg in legs_meta %}
     <a class="leg-tab"
        href="#leg-{{ leg.id }}"
-       style="background: {{ leg.color }}">
+       style="background: {{ leg.color }}"
+       data-filter-leg="{{ leg.id }}">
       {{ leg.name }}
     </a>
     {% endfor %}
@@ -395,7 +396,7 @@
         {% endif %}
         {% set ns.current_leg_id = day.leg_id %}
         {% for leg in legs_meta if leg.id == day.leg_id %}
-        <div class="leg-section" id="leg-{{ leg.id }}">
+        <div class="leg-section" id="leg-{{ leg.id }}" data-filter-leg="{{ leg.id }}">
           <div class="leg-header" style="background: {{ leg.color }}">
             <h2>{{ leg.name }}</h2>
             <div class="leg-dates">{{ leg.date_range }}</div>
@@ -555,5 +556,6 @@
 
   </main>
 
+  <script src="/static/js/family-filter.js"></script>
 </body>
 </html>
