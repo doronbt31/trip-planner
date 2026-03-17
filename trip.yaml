@@ -377,8 +377,27 @@ legs:
 logistics:
   return:
     date: "2026-08-25"
-    route: "Großarl → airport → TLV"
-    departure_airport: "TBD — Munich (MUC) or Vienna (VIE)"
-    notes: "If MUC: consider overnight near airport on Aug 24 to avoid early morning drive with kids"
+    route: "Großarl → Salzburg airport → TLV"
+    departure_airport: "Salzburg (SZG)"
     flight:
-      preferred: "El Al direct to TLV"
+      airline: "Israir"
+      from: "Salzburg (SZG)"
+      to: "Tel Aviv (TLV)"
+      doc: "data/docs/flights/אישור הזמנה - ישראייר. זלצבורג - תל אביב.pdf"
+
+  flights:
+    - id: outbound
+      label: "TLV → CPH"
+      date: "2026-08-06"
+      from_coords: [32.0055, 34.8854]
+      to_coords: [55.6179, 12.6561]
+    - id: transfer
+      label: "CPH → MUC"
+      date: "2026-08-16"
+      from_coords: [55.6179, 12.6561]
+      to_coords: [48.3538, 11.7861]
+    - id: return
+      label: "SZG → TLV"
+      date: "2026-08-25"
+      from_coords: [47.7979, 13.0044]
+      to_coords: [32.0055, 34.8854]

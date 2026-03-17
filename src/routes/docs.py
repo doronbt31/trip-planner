@@ -29,10 +29,16 @@ _FOLDER_TO_LEGS: dict[str, list[str]] = {
 _FLIGHTS_BOOKING_REF = "ZKPHJW"
 _CRUISE_BOOKING_NUMBERS = {"69970978", "69971030"}
 
+# Override labels for files with non-English or opaque filenames
+_LABEL_OVERRIDES: dict[str, str] = {
+    "אישור הזמנה - ישראייר. זלצבורג - תל אביב": "Israir — Salzburg (SZG) → Tel Aviv (TLV)",
+}
+
 
 def _derive_label(filename: str) -> str:
     """Turn a raw filename into a human-readable label."""
-    return Path(filename).stem
+    stem = Path(filename).stem
+    return _LABEL_OVERRIDES.get(stem, stem)
 
 
 def _derive_type(subfolder: str) -> str:

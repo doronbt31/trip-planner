@@ -97,6 +97,43 @@ def _grossarl_marker(leg: dict[str, Any], cfg: dict[str, str], m: folium.Map) ->
     return [[lat, lon]]
 
 
+def _arc_points(start: list[float], end: list[float], steps: int = 40) -> list[list[float]]:
+    """Return interpolated points between two lat/lon pairs for a smooth arc."""
+    return [
+        [start[0] + (end[0] - start[0]) * i / steps,
+         start[1] + (end[1] - start[1]) * i / steps]
+        for i in range(steps + 1)
+    ]
+
+
+def _draw_flights(flights: list[dict[str, Any]], m: folium.Map) -> None:
+    for flight in flights:
+        from_c = flight.get("from_coords")
+        to_c = flight.get("to_coords")
+        if not from_c or not to_c:
+            continue
+        arc = _arc_points(from_c, to_c)
+        folium.PolyLine(
+            locations=arc,
+            color="#2d3561",
+            weight=3,
+            opacity=0.55,
+            dash_array="14 7",
+            tooltip=f"✈️ {flight.get('label', '')}  ·  {flight.get('date', '')}",
+        ).add_to(m)
+        # Small plane marker at origin
+        label = flight.get('label', '')
+        folium.Marker(
+            location=from_c,
+            icon=folium.DivIcon(
+                html=f'<div style="font-size:16px;line-height:1" title="{label}">✈️</div>',
+                icon_size=(22, 22),
+                icon_anchor=(11, 11),
+            ),
+            tooltip=f"✈️ {label}",
+        ).add_to(m)
+
+
 def build_map(trip_data: dict[str, Any]) -> str:
     m = folium.Map(location=[54, 10], zoom_start=4, tiles="CartoDB positron")
 
@@ -120,5 +157,10 @@ def build_map(trip_data: dict[str, Any]) -> str:
                 dash_array="8",
                 tooltip=leg.get("name", leg_id),
             ).add_to(m)
+
+    # Draw flight routes
+    flights = trip_data.get("logistics", {}).get("flights", [])
+    if flights:
+        _draw_flights(flights, m)
 
     return m._repr_html_()

@@ -466,9 +466,16 @@
               {% set pdir = p.photos_dir if p.photos_dir is defined else '' %}
               {% set thumb_url = thumbnails[pdir] if (thumbnails is defined and pdir and pdir in thumbnails) else None %}
               {% if thumb_url %}
-              <img class="stop-thumbnail" src="{{ thumb_url }}" alt="{{ p.port }}" />
+              <a href="/gallery#leg-{{ day.leg_id }}">
+                <img class="stop-thumbnail" src="{{ thumb_url }}" alt="{{ p.port }}" />
+              </a>
               {% endif %}
-              <span class="port-name">⚓ {{ p.port }}</span>
+              <span class="port-name">⚓
+                <a href="/gallery#leg-{{ day.leg_id }}" class="stop-gallery-link">{{ p.port }}</a>
+              </span>
+              {% if pdir and photo_counts and pdir in photo_counts and photo_counts[pdir] > 0 %}
+              <a href="/gallery#leg-{{ day.leg_id }}" class="photo-badge">📷 {{ photo_counts[pdir] }}</a>
+              {% endif %}
               {% if p.arrival %}
               <span class="port-time">Arr {{ p.arrival }}</span>
               {% endif %}
