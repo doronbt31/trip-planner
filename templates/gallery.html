@@ -268,7 +268,8 @@
       {% for section in sections %}
       {% set stop_idx = loop.index0 %}
       {% set section_name = section.name if section.name is defined else section.port %}
-      <div class="stop-section">
+      {% set gid = "g-" + (section.photos_dir or "").split("/")[-1] %}
+      <div class="stop-section" id="{{ gid }}">
         <h3>{{ section_name }}</h3>
         <div class="photo-grid">
           {% if section.photos %}

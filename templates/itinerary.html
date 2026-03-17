@@ -470,11 +470,12 @@
                 <img class="stop-thumbnail" src="{{ thumb_url }}" alt="{{ p.port }}" />
               </a>
               {% endif %}
+              {% set pgid = "g-" + pdir.split("/")[-1] if pdir else "" %}
               <span class="port-name">⚓
-                <a href="/gallery#leg-{{ day.leg_id }}" class="stop-gallery-link">{{ p.port }}</a>
+                <a href="/gallery#{{ pgid }}" class="stop-gallery-link">{{ p.port }}</a>
               </span>
               {% if pdir and photo_counts and pdir in photo_counts and photo_counts[pdir] > 0 %}
-              <a href="/gallery#leg-{{ day.leg_id }}" class="photo-badge">📷 {{ photo_counts[pdir] }}</a>
+              <a href="/gallery#{{ pgid }}" class="photo-badge">📷 {{ photo_counts[pdir] }}</a>
               {% endif %}
               {% if p.arrival %}
               <span class="port-time">Arr {{ p.arrival }}</span>
@@ -524,9 +525,10 @@
                 <span title="Stroller friendly">🚼</span>
                 {% endif %}
               </span>
-              <a href="/gallery#leg-{{ day.leg_id }}" class="stop-gallery-link">{{ stop.name }}</a>
+              {% set gid = "g-" + pdir.split("/")[-1] if pdir else "" %}
+              <a href="/gallery#{{ gid }}" class="stop-gallery-link">{{ stop.name }}</a>
               {% if pdir and photo_counts and pdir in photo_counts and photo_counts[pdir] > 0 %}
-              <a href="/gallery#leg-{{ day.leg_id }}" class="photo-badge">📷 {{ photo_counts[pdir] }}</a>
+              <a href="/gallery#{{ gid }}" class="photo-badge">📷 {{ photo_counts[pdir] }}</a>
               {% endif %}
               {% if stop.notes %}
               <span class="stop-notes">{{ stop.notes }}</span>

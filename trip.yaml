@@ -52,7 +52,7 @@ legs:
           - name: "Rosenborg Castle"
             type: culture
             notes: "For the adults, skip if kids are tired"
-            photos_dir: "data/photos/copenhagen_pre/day1_kings_gardens"
+            photos_dir: "data/photos/copenhagen_pre/day1_rosenborg"
             coordinates: [55.6858, 12.5771]
             tips:
               - "Crown Jewels are the highlight — worth the entrance fee"
@@ -83,7 +83,7 @@ legs:
           - name: "Valbyparken"
             type: nature
             stroller_friendly: true
-            photos_dir: "data/photos/copenhagen_pre/day2_tivoli"
+            photos_dir: "data/photos/copenhagen_pre/day2_valbyparken"
             coordinates: [55.6589, 12.5255]
             tips:
               - "Great morning run/walk for adults while kids play"
@@ -116,7 +116,7 @@ legs:
             type: culture
             notes: "Stroller-friendly spiral ramp, panoramic city view"
             stroller_friendly: true
-            photos_dir: "data/photos/copenhagen_pre/day3_experimentarium"
+            photos_dir: "data/photos/copenhagen_pre/day3_round_tower"
             coordinates: [55.6814, 12.5757]
             tips:
               - "Unique spiral ramp (not stairs) — fully stroller-accessible"
@@ -124,7 +124,7 @@ legs:
               - "Quick visit, 30–45 min is enough"
           - name: "LEGO Flagship Store"
             type: shopping
-            photos_dir: "data/photos/copenhagen_pre/day3_experimentarium"
+            photos_dir: "data/photos/copenhagen_pre/day3_lego"
             coordinates: [55.6786, 12.5706]
             tips:
               - "Set a budget per child before entering — they will ask for everything"
@@ -181,7 +181,7 @@ legs:
         port: "Hellesylt, Norway"
         arrival: "09:00"
         departure: "09:45"
-        photos_dir: "data/photos/cruise/geiranger"
+        photos_dir: "data/photos/cruise/hellesylt"
         coordinates: [62.0883, 6.8922]
         tips:
           - "Only 45 min stop — stay near the tender, don't wander far"
@@ -276,7 +276,7 @@ legs:
             type: nature
             notes: "Stroller-friendly mountain trail with play stations, Alpine views"
             stroller_friendly: true
-            photos_dir: "data/photos/austria_flachau/grafenberg"
+            photos_dir: "data/photos/austria_flachau/floris_trail"
             coordinates: [47.3500, 13.3900]
             tips:
               - "Fully stroller-accessible — Jordan can come along"
@@ -287,7 +287,7 @@ legs:
             type: activity
             notes: "Alpine coaster for big kids, calm swimming lake"
             stroller_friendly: false
-            photos_dir: "data/photos/austria_flachau/grafenberg"
+            photos_dir: "data/photos/austria_flachau/lucky_flitzer"
             coordinates: [47.3450, 13.3850]
             tips:
               - "Alpine coaster is for Tavor — check minimum age/height"
@@ -334,7 +334,7 @@ legs:
             type: activity
             notes: "Tractor-train up the mountain, themed play stations"
             stroller_friendly: true
-            photos_dir: "data/photos/austria_flachau/grafenberg"
+            photos_dir: "data/photos/austria_flachau/geisterberg"
             coordinates: [47.3500, 13.4000]
             tips:
               - "Tractor-train ride up is half the fun — kids love it"
@@ -346,7 +346,7 @@ legs:
             notes: "Incredible waterfalls — carrier required, NOT stroller-friendly"
             stroller_friendly: false
             optional: true
-            photos_dir: "data/photos/austria_flachau/grafenberg"
+            photos_dir: "data/photos/austria_flachau/liechtensteinklamm"
             coordinates: [47.3833, 13.3167]
             tips:
               - "Bring a baby carrier for Jordan — strollers cannot do this trail"
