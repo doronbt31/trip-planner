@@ -10,12 +10,8 @@ __pycache__/
 venv/
 *.egg-info/
 
-# Photo files (keep folder structure, ignore image files)
-data/photos/**/*.jpg
-data/photos/**/*.jpeg
-data/photos/**/*.png
-data/photos/**/*.webp
-data/photos/**/*.gif
+# Real personal photos added after the trip — gitignore those locally if needed
+# (inspiration/placeholder photos are committed so GitHub Pages gallery works)
 
 # Static export output
 dist/
