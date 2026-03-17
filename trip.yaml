@@ -60,7 +60,7 @@ legs:
           - name: "Torvehallerne Food Market"
             type: food
             notes: "Upscale food stalls, great for groups"
-            photos_dir: "data/photos/copenhagen_pre/day1_kings_gardens"
+            photos_dir: "data/photos/copenhagen_pre/day1_torvehallerne"
             coordinates: [55.6833, 12.5700]
             tips:
               - "Perfect for a group lunch — everyone finds something"
@@ -70,7 +70,7 @@ legs:
             type: activity
             notes: "Relaxed boat ride, sees Opera House and Little Mermaid"
             stroller_friendly: true
-            photos_dir: "data/photos/copenhagen_pre/day1_kings_gardens"
+            photos_dir: "data/photos/copenhagen_pre/day1_nyhavn"
             coordinates: [55.6796, 12.5908]
             tips:
               - "Book the 1hr tour, not the 2hr — better for Jordan's patience"
