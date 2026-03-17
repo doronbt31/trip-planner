@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Documents — {{ trip_name }}</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #f5f5f0;
+      color: #333;
+      font-size: 15px;
+    }
+
+    header {
+      background: #1a1a2e;
+      color: #fff;
+      padding: 16px 24px;
+    }
+    header h1 { font-size: 1.25rem; font-weight: 600; letter-spacing: 0.02em; }
+    header .subtitle { font-size: 0.82rem; color: #aaa; margin-top: 3px; }
+
+    nav {
+      background: #16213e;
+      padding: 8px 24px;
+      display: flex;
+      gap: 20px;
+    }
+    nav a {
+      color: #aaa;
+      text-decoration: none;
+      font-size: 0.85rem;
+    }
+    nav a.active { color: #fff; font-weight: 600; }
+
+    .filters {
+      background: #fff;
+      border-bottom: 1px solid #e0e0e0;
+      padding: 10px 24px;
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .filter-btn {
+      padding: 4px 14px;
+      border-radius: 20px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      border: 1.5px solid #ccc;
+      background: #fff;
+      color: #555;
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s;
+    }
+    .filter-btn.active, .filter-btn:hover {
+      background: #1a1a2e;
+      color: #fff;
+      border-color: #1a1a2e;
+    }
+
+    main {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 24px 16px 48px;
+    }
+
+    .doc-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+    }
+    @media (max-width: 600px) {
+      .doc-grid { grid-template-columns: 1fr; }
+      nav { padding: 8px 12px; }
+      main { padding: 16px 8px 32px; }
+    }
+
+    .doc-card {
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 1px 5px rgba(0,0,0,0.08);
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      transition: box-shadow 0.15s;
+    }
+    .doc-card:hover { box-shadow: 0 3px 12px rgba(0,0,0,0.12); }
+    .doc-card.hidden { display: none; }
+
+    .doc-card-top {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+    }
+    .doc-icon { font-size: 1.6rem; flex-shrink: 0; line-height: 1; }
+    .doc-label {
+      font-weight: 600;
+      font-size: 0.9rem;
+      line-height: 1.3;
+      word-break: break-word;
+    }
+
+    .doc-meta {
+      font-size: 0.78rem;
+      color: #777;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+    .doc-meta span { display: flex; align-items: center; gap: 4px; }
+
+    .type-badge {
+      display: inline-block;
+      border-radius: 10px;
+      padding: 2px 9px;
+      font-size: 0.68rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #fff;
+    }
+    .type-flight  { background: #378ADD; }
+    .type-cruise  { background: #f0a500; }
+    .type-hotel   { background: #3aaa5e; }
+    .type-other   { background: #9ca3af; }
+
+    .doc-card-footer {
+      margin-top: auto;
+    }
+    .view-btn {
+      display: inline-block;
+      padding: 6px 16px;
+      background: #1a1a2e;
+      color: #fff;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: background 0.15s;
+    }
+    .view-btn:hover { background: #2d2d5e; }
+    .view-btn.disabled {
+      background: #ccc;
+      color: #888;
+      pointer-events: none;
+      cursor: default;
+    }
+
+    .empty-state {
+      grid-column: 1 / -1;
+      text-align: center;
+      color: #bbb;
+      font-size: 0.9rem;
+      padding: 40px 0;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>📄 Trip Documents</h1>
+    <p class="subtitle">{{ docs | length }} document{{ 's' if docs | length != 1 else '' }}</p>
+  </header>
+
+  <nav>
+    <a href="/map">🗺 Map</a>
+    <a href="/itinerary">📅 Itinerary</a>
+    <a href="/docs" class="active">📄 Documents</a>
+  </nav>
+
+  <div class="filters">
+    <button class="filter-btn active" data-filter="all" onclick="filterDocs(this, 'all')">All</button>
+    <button class="filter-btn" data-filter="flight" onclick="filterDocs(this, 'flight')">✈️ Flights</button>
+    <button class="filter-btn" data-filter="cruise" onclick="filterDocs(this, 'cruise')">🚢 Cruise</button>
+    <button class="filter-btn" data-filter="hotel" onclick="filterDocs(this, 'hotel')">🏨 Hotels</button>
+    <button class="filter-btn" data-filter="other" onclick="filterDocs(this, 'other')">📁 Other</button>
+  </div>
+
+  <main>
+    <div class="doc-grid" id="doc-grid">
+      {% for doc in docs %}
+      <div class="doc-card" data-type="{{ doc.type }}">
+        <div class="doc-card-top">
+          <span class="doc-icon">{{ '⚠️' if not doc.file_exists else '📄' }}</span>
+          <div>
+            <div class="doc-label">{{ doc.label }}</div>
+            <span class="type-badge type-{{ doc.type }}">{{ doc.type }}</span>
+          </div>
+        </div>
+        <div class="doc-meta">
+          {% if doc.leg_name %}
+          <span>📍 {{ doc.leg_name }}</span>
+          {% endif %}
+          {% if doc.booking_ref %}
+          <span>🔖 Ref: {{ doc.booking_ref }}</span>
+          {% endif %}
+          {% if not doc.file_exists %}
+          <span style="color:#e57373;">⚠️ File missing</span>
+          {% endif %}
+        </div>
+        <div class="doc-card-footer">
+          {% if doc.file_exists %}
+          <a class="view-btn" href="/docs/view/{{ doc.id }}">View</a>
+          {% else %}
+          <span class="view-btn disabled">Unavailable</span>
+          {% endif %}
+        </div>
+      </div>
+      {% else %}
+      <div class="empty-state">No documents found.</div>
+      {% endfor %}
+    </div>
+  </main>
+
+  <script>
+    function filterDocs(btn, type) {
+      // Update active button
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      // Show/hide cards
+      document.querySelectorAll('#doc-grid .doc-card').forEach(card => {
+        if (type === 'all' || card.dataset.type === type) {
+          card.classList.remove('hidden');
+        } else {
+          card.classList.add('hidden');
+        }
+      });
+    }
+  </script>
+
+</body>
+</html>

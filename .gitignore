@@ -1,0 +1,24 @@
+# macOS
+.DS_Store
+**/.DS_Store
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.venv/
+venv/
+*.egg-info/
+
+# Photo files (keep folder structure, ignore image files)
+data/photos/**/*.jpg
+data/photos/**/*.jpeg
+data/photos/**/*.png
+data/photos/**/*.webp
+data/photos/**/*.gif
+
+# Static export output
+dist/
+
+# Environment — never commit API keys
+.env

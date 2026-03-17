@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Itinerary — {{ trip_name }}</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #f5f5f0;
+      color: #333;
+      font-size: 15px;
+    }
+
+    /* ── Header ── */
+    header {
+      background: #1a1a2e;
+      color: #fff;
+      padding: 16px 24px;
+    }
+    header h1 {
+      font-size: 1.25rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+    }
+    header .subtitle {
+      font-size: 0.82rem;
+      color: #aaa;
+      margin-top: 3px;
+    }
+
+    /* ── Nav ── */
+    nav {
+      background: #16213e;
+      padding: 8px 24px;
+      display: flex;
+      gap: 20px;
+    }
+    nav a {
+      color: #aaa;
+      text-decoration: none;
+      font-size: 0.85rem;
+    }
+    nav a.active {
+      color: #fff;
+      font-weight: 600;
+    }
+
+    /* ── Leg tabs ── */
+    .leg-tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      padding: 12px 24px;
+      background: #fff;
+      border-bottom: 1px solid #e0e0e0;
+    }
+    .leg-tab {
+      display: inline-block;
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      text-decoration: none;
+      color: #fff;
+      opacity: 0.9;
+      transition: opacity 0.15s;
+    }
+    .leg-tab:hover { opacity: 1; }
+
+    /* ── Main content ── */
+    main {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 24px 16px 40px;
+    }
+
+    /* ── Leg section ── */
+    .leg-section {
+      margin-bottom: 32px;
+    }
+    .leg-header {
+      border-radius: 8px 8px 0 0;
+      padding: 12px 18px;
+      color: #fff;
+      margin-bottom: 4px;
+    }
+    .leg-header h2 {
+      font-size: 1.05rem;
+      font-weight: 700;
+    }
+    .leg-header .leg-dates {
+      font-size: 0.8rem;
+      opacity: 0.85;
+      margin-top: 2px;
+    }
+
+    /* ── Day card ── */
+    .day-card {
+      background: #fff;
+      border-radius: 0 0 8px 8px;
+      margin-bottom: 10px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.07);
+      border-left: 4px solid #ccc;
+      overflow: hidden;
+    }
+    .day-card + .day-card {
+      border-radius: 8px;
+    }
+    .day-card-inner {
+      padding: 14px 16px;
+    }
+
+    /* ── Day meta row ── */
+    .day-meta {
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+      margin-bottom: 6px;
+      flex-wrap: wrap;
+    }
+    .day-date {
+      font-size: 0.82rem;
+      color: #666;
+      font-weight: 500;
+    }
+    .day-number {
+      font-size: 0.72rem;
+      color: #999;
+      background: #f0f0f0;
+      border-radius: 10px;
+      padding: 1px 7px;
+    }
+
+    /* ── Theme ── */
+    .day-theme {
+      font-size: 1rem;
+      font-weight: 600;
+      color: #222;
+      margin-bottom: 10px;
+    }
+
+    /* ── Special day banners ── */
+    .banner {
+      border-radius: 6px;
+      padding: 8px 12px;
+      font-size: 0.88rem;
+      margin-bottom: 10px;
+    }
+    .banner-sea {
+      background: #dbeafe;
+      color: #1e40af;
+    }
+    .banner-travel {
+      background: #fef9c3;
+      color: #854d0e;
+    }
+    .banner-travel .travel-notes {
+      margin-top: 4px;
+      font-size: 0.82rem;
+      color: #92400e;
+    }
+    .banner-highlights {
+      background: #f0fdf4;
+      color: #166534;
+      font-size: 0.82rem;
+    }
+
+    /* ── Cruise port ── */
+    .port-list {
+      list-style: none;
+      margin-bottom: 8px;
+    }
+    .port-item {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      align-items: center;
+      padding: 6px 0;
+      border-bottom: 1px solid #f0f0f0;
+      font-size: 0.88rem;
+    }
+    .port-item:last-child { border-bottom: none; }
+    .port-name { font-weight: 600; }
+    .port-time {
+      font-size: 0.78rem;
+      color: #666;
+      background: #f5f5f5;
+      border-radius: 4px;
+      padding: 1px 6px;
+    }
+    .port-notes {
+      font-size: 0.78rem;
+      color: #888;
+      font-style: italic;
+      width: 100%;
+    }
+
+    /* ── Stop list ── */
+    .stop-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+    }
+    .stop-item {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: flex-start;
+      gap: 6px;
+      font-size: 0.88rem;
+    }
+    .stop-name { font-weight: 500; }
+    .stop-notes {
+      color: #666;
+      font-size: 0.82rem;
+      width: 100%;
+      padding-left: 2px;
+    }
+    .stop-icons {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      flex-shrink: 0;
+    }
+
+    /* ── Type badge ── */
+    .badge {
+      display: inline-block;
+      border-radius: 10px;
+      padding: 1px 8px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      color: #fff;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .badge-nature   { background: #3aaa5e; }
+    .badge-food     { background: #E8882A; }
+    .badge-activity { background: #378ADD; }
+    .badge-museum   { background: #8b5cf6; }
+    .badge-culture  { background: #0891b2; }
+    .badge-shopping { background: #6b7280; }
+    .badge-other    { background: #9ca3af; }
+
+    /* ── No stops placeholder ── */
+    .no-stops {
+      color: #bbb;
+      font-size: 0.82rem;
+      font-style: italic;
+    }
+
+    /* ── Photo badge ── */
+    .photo-badge {
+      font-size: 0.72rem;
+      background: #f0f0f0;
+      border-radius: 10px;
+      padding: 2px 7px;
+      text-decoration: none;
+      color: #555;
+      margin-left: 6px;
+    }
+
+    /* ── Weather strip ── */
+    .weather-strip {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 8px;
+    }
+    .weather-day {
+      background: rgba(255,255,255,0.15);
+      border-radius: 6px;
+      padding: 3px 8px;
+      font-size: 0.72rem;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      white-space: nowrap;
+    }
+    .weather-day .w-date { opacity: 0.85; }
+    .weather-day .w-icon { font-size: 0.9rem; }
+    .weather-day .w-temp { font-weight: 600; }
+    .weather-note {
+      font-size: 0.68rem;
+      opacity: 0.75;
+      font-style: italic;
+      margin-top: 4px;
+    }
+
+    /* ── Photo thumbnail ── */
+    .stop-thumbnail {
+      width: 72px;
+      height: 72px;
+      object-fit: cover;
+      border-radius: 6px;
+      float: left;
+      margin-right: 10px;
+      flex-shrink: 0;
+    }
+    .stop-gallery-link {
+      color: inherit;
+      text-decoration: none;
+      font-weight: 500;
+    }
+    .stop-gallery-link:hover {
+      text-decoration: underline;
+      color: #378ADD;
+    }
+    .stop-with-thumb {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+    }
+
+    /* ── Concierge tips panel ── */
+    .tips-toggle {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 0.78rem;
+      color: #888;
+      cursor: pointer;
+      margin-top: 4px;
+      padding: 2px 6px;
+      border-radius: 10px;
+      background: #f9f5e0;
+      border: 1px solid #e8d96e;
+      user-select: none;
+    }
+    .tips-toggle:hover { background: #f5f0c0; }
+    .tips-panel {
+      display: none;
+      background: #fffef5;
+      border-left: 3px solid #e8d96e;
+      padding: 8px 12px;
+      margin-top: 6px;
+      border-radius: 0 6px 6px 0;
+      font-size: 0.82rem;
+      color: #555;
+    }
+    .tips-panel.tips-open { display: block; }
+    .tips-panel ul { padding-left: 16px; margin: 0 0 8px 0; }
+    .tips-panel li { margin-bottom: 4px; line-height: 1.4; }
+    .ask-ai-link {
+      font-size: 0.78rem;
+      color: #378ADD;
+      text-decoration: none;
+    }
+    .ask-ai-link:hover { text-decoration: underline; }
+
+    /* ── Mobile ── */
+    @media (max-width: 480px) {
+      main { padding: 16px 8px 32px; }
+      .leg-tabs { padding: 10px 12px; }
+      nav { padding: 8px 12px; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>📅 {{ trip_name }}</h1>
+    <p class="subtitle">Aug 6 – 25, 2026 &nbsp;·&nbsp; {{ days | length }} days</p>
+  </header>
+
+  <nav>
+    <a href="/map">🗺 Map</a>
+    <a href="/itinerary" class="active">📅 Itinerary</a>
+    <a href="/docs">📄 Documents</a>
+    <a href="/gallery">📷 Gallery</a>
+    <a href="/chat">🤖 Ask AI</a>
+  </nav>
+
+  <div class="leg-tabs">
+    {% for leg in legs_meta %}
+    <a class="leg-tab"
+       href="#leg-{{ leg.id }}"
+       style="background: {{ leg.color }}">
+      {{ leg.name }}
+    </a>
+    {% endfor %}
+  </div>
+
+  <main>
+    {% set ns = namespace(current_leg_id=None) %}
+    {% for day in days %}
+
+      {# ── Open a new leg section when the leg changes ── #}
+      {% if day.leg_id != ns.current_leg_id %}
+        {% if ns.current_leg_id is not none %}
+        </div><!-- end leg-section -->
+        {% endif %}
+        {% set ns.current_leg_id = day.leg_id %}
+        {% for leg in legs_meta if leg.id == day.leg_id %}
+        <div class="leg-section" id="leg-{{ leg.id }}">
+          <div class="leg-header" style="background: {{ leg.color }}">
+            <h2>{{ leg.name }}</h2>
+            <div class="leg-dates">{{ leg.date_range }}</div>
+            {% if weather and leg.id in weather and weather[leg.id] %}
+            {% set leg_weather = weather[leg.id] %}
+            {% set unavailable_item = leg_weather | selectattr('unavailable', 'defined') | list %}
+            {% set note_item = leg_weather | selectattr('note', 'defined') | list %}
+            {% set day_items = leg_weather | rejectattr('note', 'defined') | rejectattr('unavailable', 'defined') | list %}
+            {% if unavailable_item %}
+            <div class="weather-note">🗓 {{ unavailable_item[0].reason }}</div>
+            {% elif note_item %}
+            <div class="weather-note">{{ note_item[0].note }}</div>
+            {% endif %}
+            {% if day_items %}
+            <div class="weather-strip">
+              {% for w in day_items[:5] %}
+              <div class="weather-day">
+                <span class="w-date">{{ w.date[5:] | replace('-', '/') }}</span>
+                <span class="w-icon">{{ w.icon }}</span>
+                <span class="w-temp">{{ w.temp_max }}° / {{ w.temp_min }}°</span>
+              </div>
+              {% endfor %}
+            </div>
+            {% endif %}
+            {% endif %}
+          </div>
+        {% endfor %}
+      {% endif %}
+
+      {# ── Day card ── #}
+      <div class="day-card" style="border-left-color: {{ day.leg_color }}">
+        <div class="day-card-inner">
+
+          {# Meta row #}
+          <div class="day-meta">
+            {% if day.display_date %}
+            <span class="day-date">{{ day.display_date }}</span>
+            {% endif %}
+            <span class="day-number">Day {{ day.day_number }}</span>
+          </div>
+
+          {# Theme #}
+          {% if day.theme and day.theme != "Travel Day" %}
+          <h3 class="day-theme">{{ day.theme }}</h3>
+          {% endif %}
+
+          {# At sea banner #}
+          {% if day.is_at_sea %}
+          <div class="banner banner-sea">🌊 At Sea</div>
+          {% endif %}
+
+          {# Travel day banner #}
+          {% if day.is_travel_day %}
+          <div class="banner banner-travel">
+            <strong>✈️ Travel Day</strong>
+            {% if day.travel_notes %}
+            <div class="travel-notes">{{ day.travel_notes }}</div>
+            {% endif %}
+          </div>
+          {% endif %}
+
+          {# Cruise ports #}
+          {% if day.cruise_port %}
+          <ul class="port-list">
+            {% for p in day.cruise_port %}
+            <li class="port-item">
+              {% set pdir = p.photos_dir if p.photos_dir is defined else '' %}
+              {% set thumb_url = thumbnails[pdir] if (thumbnails is defined and pdir and pdir in thumbnails) else None %}
+              {% if thumb_url %}
+              <img class="stop-thumbnail" src="{{ thumb_url }}" alt="{{ p.port }}" />
+              {% endif %}
+              <span class="port-name">⚓ {{ p.port }}</span>
+              {% if p.arrival %}
+              <span class="port-time">Arr {{ p.arrival }}</span>
+              {% endif %}
+              {% if p.departure %}
+              <span class="port-time">Dep {{ p.departure }}</span>
+              {% endif %}
+              {% if p.notes %}
+              <span class="port-notes">{{ p.notes }}</span>
+              {% endif %}
+              {% if p.tips %}
+              <div class="tips-toggle" onclick="this.nextElementSibling.classList.toggle('tips-open')" style="width:100%">
+                💡 <span>{{ p.tips | length }} tip{{ 's' if p.tips | length > 1 else '' }}</span>
+              </div>
+              <div class="tips-panel">
+                <ul>
+                  {% for tip in p.tips %}
+                  <li>{{ tip }}</li>
+                  {% endfor %}
+                </ul>
+                <a href="/chat?q={{ p.port | urlencode }}" class="ask-ai-link">🤖 Ask AI about {{ p.port }} →</a>
+              </div>
+              {% endif %}
+            </li>
+            {% endfor %}
+          </ul>
+          {% endif %}
+
+          {# Grossarl highlights shown as banner when no stops #}
+          {% if not day.stops and not day.is_at_sea and not day.is_travel_day and day.travel_notes and not day.cruise_port %}
+          <div class="banner banner-highlights">{{ day.travel_notes }}</div>
+          {% endif %}
+
+          {# Stops #}
+          {% if day.stops %}
+          <ul class="stop-list">
+            {% for stop in day.stops %}
+            <li class="stop-item">
+              {% set pdir = stop.photos_dir if stop.photos_dir is defined else '' %}
+              {% set thumb_url = thumbnails[pdir] if (thumbnails is defined and pdir and pdir in thumbnails) else None %}
+              {% if thumb_url %}
+              <img class="stop-thumbnail" src="{{ thumb_url }}" alt="{{ stop.name }}" />
+              {% endif %}
+              <span class="stop-icons">
+                <span class="badge badge-{{ stop.type | default('other') }}">{{ stop.type | default('activity') }}</span>
+                {% if stop.stroller_friendly %}
+                <span title="Stroller friendly">🚼</span>
+                {% endif %}
+              </span>
+              <a href="/gallery#leg-{{ day.leg_id }}" class="stop-gallery-link">{{ stop.name }}</a>
+              {% if pdir and photo_counts and pdir in photo_counts and photo_counts[pdir] > 0 %}
+              <a href="/gallery#leg-{{ day.leg_id }}" class="photo-badge">📷 {{ photo_counts[pdir] }}</a>
+              {% endif %}
+              {% if stop.notes %}
+              <span class="stop-notes">{{ stop.notes }}</span>
+              {% endif %}
+              {% if stop.tips %}
+              <div class="tips-toggle" onclick="this.nextElementSibling.classList.toggle('tips-open')">
+                💡 <span>{{ stop.tips | length }} tip{{ 's' if stop.tips | length > 1 else '' }}</span>
+              </div>
+              <div class="tips-panel">
+                <ul>
+                  {% for tip in stop.tips %}
+                  <li>{{ tip }}</li>
+                  {% endfor %}
+                </ul>
+                <a href="/chat?q={{ stop.name | urlencode }}" class="ask-ai-link">🤖 Ask AI about {{ stop.name }} →</a>
+              </div>
+              {% endif %}
+            </li>
+            {% endfor %}
+          </ul>
+          {% elif not day.is_at_sea and not day.is_travel_day and not day.travel_notes %}
+          <p class="no-stops">No planned stops</p>
+          {% endif %}
+
+        </div><!-- day-card-inner -->
+      </div><!-- day-card -->
+
+    {% endfor %}
+
+    {# Close the last open leg section #}
+    {% if ns.current_leg_id is not none %}
+    </div><!-- end leg-section -->
+    {% endif %}
+
+  </main>
+
+</body>
+</html>

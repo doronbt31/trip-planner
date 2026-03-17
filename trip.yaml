@@ -1,0 +1,384 @@
+trip:
+  name: "Family Summer Trip 2026"
+  year: 2026
+  travelers:
+    - name: Doron
+      role: adult
+    - name: Chen
+      role: adult
+    - name: Tavor
+      role: child
+      age_during_trip: 9
+    - name: Ella
+      role: child
+      dob: "2020-02-01"
+      age_during_trip: 6
+    - name: Jordan
+      role: child
+      age_during_trip: 1
+
+legs:
+
+  - id: copenhagen_pre
+    name: "Copenhagen — pre-cruise"
+    type: land
+    country: Denmark
+    photos_dir: "data/photos/copenhagen_pre"
+    dates:
+      start: "2026-08-06"
+      end: "2026-08-09"
+    stay:
+      area: "Vesterbro / Nyhavn"
+      notes: "City center, walkable to harbor"
+    coordinates: [55.6761, 12.5683]
+    group:
+      notes: "With Doron's parents, brothers and their families"
+    logistics:
+      arrival: "Fly TLV → CPH on Aug 6"
+    days:
+      - day: 1
+        date: "2026-08-06"
+        theme: "Royalty & Harbor"
+        stops:
+          - name: "King's Gardens (Kongens Have)"
+            type: nature
+            stroller_friendly: true
+            photos_dir: "data/photos/copenhagen_pre/day1_kings_gardens"
+            coordinates: [55.6867, 12.5771]
+            tips:
+              - "Beautifully flat — ideal for Jordan's stroller"
+              - "Combine with Rosenborg Castle right next door"
+              - "Busy on weekends — arrive before 10am"
+          - name: "Rosenborg Castle"
+            type: culture
+            notes: "For the adults, skip if kids are tired"
+            photos_dir: "data/photos/copenhagen_pre/day1_kings_gardens"
+            coordinates: [55.6858, 12.5771]
+            tips:
+              - "Crown Jewels are the highlight — worth the entrance fee"
+              - "Skip if Jordan is restless — the gardens outside are free"
+          - name: "Torvehallerne Food Market"
+            type: food
+            notes: "Upscale food stalls, great for groups"
+            photos_dir: "data/photos/copenhagen_pre/day1_kings_gardens"
+            coordinates: [55.6833, 12.5700]
+            tips:
+              - "Perfect for a group lunch — everyone finds something"
+              - "Try the smørrebrød (open sandwiches) and fresh pastries"
+              - "Gets crowded 12–2pm — arrive early or late"
+          - name: "Nyhavn Canal Tour"
+            type: activity
+            notes: "Relaxed boat ride, sees Opera House and Little Mermaid"
+            stroller_friendly: true
+            photos_dir: "data/photos/copenhagen_pre/day1_kings_gardens"
+            coordinates: [55.6796, 12.5908]
+            tips:
+              - "Book the 1hr tour, not the 2hr — better for Jordan's patience"
+              - "Hop-on hop-off boats also stop here — flexible option"
+              - "Evening cruise is magical with the lit-up houses"
+      - day: 2
+        date: "2026-08-07"
+        theme: "Nature & Magic"
+        stops:
+          - name: "Valbyparken"
+            type: nature
+            stroller_friendly: true
+            photos_dir: "data/photos/copenhagen_pre/day2_tivoli"
+            coordinates: [55.6589, 12.5255]
+            tips:
+              - "Great morning run/walk for adults while kids play"
+              - "Has a large playground — Tavor and Ella will love it"
+          - name: "Tivoli Gardens"
+            type: activity
+            notes: "Dinner at Pincho Nation (circus-themed tapas)"
+            photos_dir: "data/photos/copenhagen_pre/day2_tivoli"
+            coordinates: [55.6736, 12.5681]
+            tips:
+              - "Buy tickets online in advance — summer queues are brutal"
+              - "Go after 6pm for the evening lights — worth staying for"
+              - "Pincho Nation inside is circus-themed tapas, great for families"
+              - "Minimum height for big rides is ~120cm — Tavor qualifies, Ella may not for some"
+      - day: 3
+        date: "2026-08-08"
+        theme: "Science & LEGO"
+        stops:
+          - name: "Experimentarium"
+            type: museum
+            notes: "Miniverse section for toddlers"
+            stroller_friendly: true
+            photos_dir: "data/photos/copenhagen_pre/day3_experimentarium"
+            coordinates: [55.7297, 12.5776]
+            tips:
+              - "Miniverse section is perfect for Jordan (1yo) — dedicated toddler zone"
+              - "Arrive at opening (10am) — fills up fast in summer"
+              - "Allow 2.5–3hrs minimum — kids will not want to leave"
+          - name: "The Round Tower (Rundetårn)"
+            type: culture
+            notes: "Stroller-friendly spiral ramp, panoramic city view"
+            stroller_friendly: true
+            photos_dir: "data/photos/copenhagen_pre/day3_experimentarium"
+            coordinates: [55.6814, 12.5757]
+            tips:
+              - "Unique spiral ramp (not stairs) — fully stroller-accessible"
+              - "Best views of Copenhagen from the top — worth the climb"
+              - "Quick visit, 30–45 min is enough"
+          - name: "LEGO Flagship Store"
+            type: shopping
+            photos_dir: "data/photos/copenhagen_pre/day3_experimentarium"
+            coordinates: [55.6786, 12.5706]
+            tips:
+              - "Set a budget per child before entering — they will ask for everything"
+              - "Tavor (9) will love the Technic section, Ella (6) the Friends sets"
+              - "Free to browse — great even without buying"
+    backup_options:
+      - name: "Den Blå Planet (National Aquarium)"
+        notes: "Shark tunnel"
+      - name: "Copenhagen Zoo"
+        notes: "Panda house and polar bears"
+      - name: "Children's Museum (National Museum)"
+        notes: "Viking role-play"
+      - name: "Reffen"
+        notes: "Huge outdoor street food market on the water"
+
+  - id: cruise
+    name: "MSC Euribia — Norway Fjords Cruise"
+    type: cruise
+    photos_dir: "data/photos/cruise"
+    dates:
+      start: "2026-08-09"
+      end: "2026-08-16"
+    group:
+      notes: "With Doron's parents, brothers and their families — same group as Copenhagen"
+    booking:
+      number: "69970978"
+      ticket: "997349067"
+      cabin: "13244"
+      category: "BR3 - Balcony Stateroom"
+      experience: "FANTASTICA"
+      dining: "Late dining"
+      balance_due: 4460.66
+      balance_due_date: "2026-05-11"
+    embarkation:
+      port: "Copenhagen, Denmark"
+      date: "2026-08-09"
+      checkin_opens: "11:00"
+      departure: "18:00"
+    disembarkation:
+      port: "Copenhagen, Denmark"
+      date: "2026-08-16"
+      arrival: "08:00"
+    itinerary:
+      - date: "2026-08-09"
+        port: "Copenhagen, Denmark"
+        arrival: null
+        departure: "18:00"
+        coordinates: [55.6761, 12.5683]
+      - date: "2026-08-10"
+        port: "At sea"
+        arrival: null
+        departure: null
+      - date: "2026-08-11"
+        port: "Hellesylt, Norway"
+        arrival: "09:00"
+        departure: "09:45"
+        photos_dir: "data/photos/cruise/geiranger"
+        coordinates: [62.0883, 6.8922]
+        tips:
+          - "Only 45 min stop — stay near the tender, don't wander far"
+          - "Great photo opportunity of the fjord from the dock"
+      - date: "2026-08-11"
+        port: "Geiranger, Norway"
+        arrival: "12:00"
+        departure: "21:00"
+        photos_dir: "data/photos/cruise/geiranger"
+        coordinates: [62.1006, 7.2058]
+        notes: "Geirangerfjord — UNESCO World Heritage site"
+        tips:
+          - "Full day — your cruise highlight, plan it carefully"
+          - "Storseterfossen waterfall hike is stroller-accessible to the main viewpoint"
+          - "Book a fjord RIB boat tour for dramatic up-close waterfall views"
+          - "Seven Sisters waterfall visible from the ship — be on deck on arrival"
+      - date: "2026-08-12"
+        port: "Alesund, Norway"
+        arrival: "07:00"
+        departure: "17:00"
+        photos_dir: "data/photos/cruise/alesund"
+        coordinates: [62.4722, 6.1495]
+        tips:
+          - "Atlanterhavsparken aquarium is excellent for kids — plan 2hrs"
+          - "Art Nouveau architecture is beautiful — walk the town centre"
+          - "418 steps up to Aksla viewpoint — worth it for Tavor and Ella, skip with Jordan"
+          - "Fresh shrimp at the fishmarket dock is a local morning tradition"
+      - date: "2026-08-13"
+        port: "Flaam, Norway"
+        arrival: "07:00"
+        departure: "18:00"
+        photos_dir: "data/photos/cruise/flaam"
+        coordinates: [60.8629, 7.1193]
+        notes: "Flamsbana railway, Nærøyfjord kayaking"
+        tips:
+          - "Book Flamsbana railway NOW — sells out weeks in advance, do it before boarding"
+          - "The train ride is spectacular — waterfalls, mountain farms, tunnels"
+          - "Nærøyfjord kayaking: arrange Doron/Chen to go while kids explore the village"
+          - "Flåm village is tiny — 1hr is enough outside of the railway"
+      - date: "2026-08-14"
+        port: "At sea"
+        arrival: null
+        departure: null
+      - date: "2026-08-15"
+        port: "Kiel, Germany"
+        arrival: "09:00"
+        departure: "19:00"
+        photos_dir: "data/photos/cruise/kiel"
+        coordinates: [54.3233, 10.1394]
+        tips:
+          - "Least spectacular port — treat it as a relaxed day"
+          - "Consider staying on board — pools and kids' club are empty when everyone is ashore"
+          - "Kiel waterfront is pleasant for a short walk if you do go"
+      - date: "2026-08-16"
+        port: "Copenhagen, Denmark"
+        arrival: "08:00"
+        departure: null
+        coordinates: [55.6761, 12.5683]
+
+  - id: austria_flachau
+    name: "Flachau Area — Austria"
+    type: land
+    country: Austria
+    photos_dir: "data/photos/austria_flachau"
+    dates:
+      start: "2026-08-16"
+      end: "2026-08-22"
+    stay:
+      area: "Flachau"
+      notes: "Meeting another family with young kids"
+    coordinates: [47.3472, 13.3894]
+    group:
+      notes: "With Chen's family — brother, sister and their families"
+    logistics:
+      flight:
+        from: "Copenhagen (CPH)"
+        to: "Munich (MUC)"
+        date: "2026-08-16"
+        departure: "12:50"
+        arrival: "14:25"
+        order: "1119-979-712"
+        notes: "Day of cruise disembarkation — 08:00 off ship, 4.5hr buffer before flight"
+      car_rental:
+        pickup: "Munich (MUC)"
+        dropoff: "Munich (MUC)"
+        notes: "Returning in Vienna incurs $300-600 one-way fee — avoid"
+    days:
+      - day_range: "1-3"
+        theme: "Acclimatization"
+        stops:
+          - name: "Flori's Erlebnispfad"
+            type: nature
+            notes: "Stroller-friendly mountain trail with play stations, Alpine views"
+            stroller_friendly: true
+            photos_dir: "data/photos/austria_flachau/grafenberg"
+            coordinates: [47.3500, 13.3900]
+            tips:
+              - "Fully stroller-accessible — Jordan can come along"
+              - "Interactive play stations along the trail keep kids engaged"
+              - "Bring a picnic — Alpine meadow views are stunning"
+              - "Morning is best before afternoon clouds roll in"
+          - name: "Lucky Flitzer & Reitecksee"
+            type: activity
+            notes: "Alpine coaster for big kids, calm swimming lake"
+            stroller_friendly: false
+            photos_dir: "data/photos/austria_flachau/grafenberg"
+            coordinates: [47.3450, 13.3850]
+            tips:
+              - "Alpine coaster is for Tavor — check minimum age/height"
+              - "Reitecksee lake is calm and warm enough for swimming in August"
+              - "Jordan stays at the lake with one parent while others do the coaster"
+          - name: "Hellbrunn Palace — Trick Fountains"
+            type: culture
+            location: "Salzburg"
+            notes: "Hilarious water-splashing for all ages"
+            stroller_friendly: true
+            photos_dir: "data/photos/austria_flachau/hellbrunn_palace"
+            coordinates: [47.7580, 13.0611]
+            tips:
+              - "Everyone WILL get wet — pack a full change of clothes for all 3 kids"
+              - "The trick fountains tour is guided and takes ~45 min"
+              - "Combine with a Salzburg old town visit (30 min drive)"
+              - "Book timed entry online — queues in August"
+      - day_range: "4-6"
+        theme: "Group Activities"
+        stops:
+          - name: "Grafenberg (Wagrain)"
+            type: activity
+            notes: "Cable car, water rafts, nature park — stroller accessible"
+            stroller_friendly: true
+            photos_dir: "data/photos/austria_flachau/grafenberg"
+            coordinates: [47.3333, 13.3000]
+            tips:
+              - "Full family day out — cable car, water activities, nature trails"
+              - "Check age/weight minimums for Jordan on cable car before going"
+              - "Water raft section is the highlight for Tavor and Ella"
+              - "Bring swimwear and towels"
+          - name: "Jägersee Lake"
+            type: nature
+            notes: "Turquoise lake, flat easy walking path"
+            stroller_friendly: true
+            photos_dir: "data/photos/austria_flachau/jagersee_lake"
+            coordinates: [47.3667, 13.4167]
+            tips:
+              - "One of the most beautiful lakes in the region — turquoise alpine water"
+              - "Flat walking path all the way around — perfect with Jordan's stroller"
+              - "Water is cold even in August — paddling rather than swimming for kids"
+              - "Small restaurant at the lake serves excellent Kaiserschmarrn"
+          - name: "Geisterberg (Ghost Mountain)"
+            type: activity
+            notes: "Tractor-train up the mountain, themed play stations"
+            stroller_friendly: true
+            photos_dir: "data/photos/austria_flachau/grafenberg"
+            coordinates: [47.3500, 13.4000]
+            tips:
+              - "Tractor-train ride up is half the fun — kids love it"
+              - "Ghost-themed play stations along the summit trail"
+              - "Suitable for all ages including Jordan"
+              - "Afternoon activity — cooler once you're up on the mountain"
+          - name: "Liechtensteinklamm Gorge"
+            type: nature
+            notes: "Incredible waterfalls — carrier required, NOT stroller-friendly"
+            stroller_friendly: false
+            optional: true
+            photos_dir: "data/photos/austria_flachau/grafenberg"
+            coordinates: [47.3833, 13.3167]
+            tips:
+              - "Bring a baby carrier for Jordan — strollers cannot do this trail"
+              - "One of Austria's most dramatic gorges — narrow wooden walkways over roaring water"
+              - "Plan as a half-day: adults take turns carrying Jordan"
+              - "Bring a rain jacket — the mist from the falls soaks you"
+              - "Allow 2hrs for the full gorge walk"
+
+  - id: grossarl
+    name: "Großarl — Kinderhotel Waldhof"
+    type: land
+    country: Austria
+    photos_dir: "data/photos/grossarl"
+    dates:
+      start: "2026-08-22"
+      end: "2026-08-25"
+    stay:
+      name: "Kinderhotel Waldhof"
+      type: luxury
+      notes: "Kids clubs, water slides, pools, spa, gourmet dining"
+    coordinates: [47.2333, 13.2000]
+    highlights:
+      - "Baby Club for the youngest"
+      - "Water slides and indoor/outdoor pools"
+      - "High-end spa for adults"
+      - "Valley of Alms — mountain huts, local cheese, farm animals"
+
+logistics:
+  return:
+    date: "2026-08-25"
+    route: "Großarl → airport → TLV"
+    departure_airport: "TBD — Munich (MUC) or Vienna (VIE)"
+    notes: "If MUC: consider overnight near airport on Aug 24 to avoid early morning drive with kids"
+    flight:
+      preferred: "El Al direct to TLV"

@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Trip Assistant — {{ trip_name }}</title>
+  <!-- marked.js for markdown rendering -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/9.1.6/marked.min.js"></script>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #f5f5f0;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      overflow: hidden;
+    }
+    header {
+      background: #1a1a2e;
+      color: #fff;
+      padding: 14px 24px;
+      flex-shrink: 0;
+    }
+    header h1 { font-size: 1.1rem; font-weight: 600; }
+    header .subtitle { font-size: 0.78rem; color: #aaa; margin-top: 2px; }
+    nav {
+      background: #16213e;
+      padding: 8px 24px;
+      display: flex;
+      gap: 20px;
+      flex-shrink: 0;
+    }
+    nav a { color: #aaa; text-decoration: none; font-size: 0.85rem; }
+    nav a.active { color: #fff; font-weight: 600; }
+    #chat-window {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px 24px;
+      max-width: 800px;
+      width: 100%;
+      margin: 0 auto;
+      align-self: stretch;
+    }
+    .message-wrapper {
+      display: flex;
+      margin-bottom: 12px;
+    }
+    .message-wrapper.user { justify-content: flex-end; }
+    .message-wrapper.assistant { justify-content: flex-start; }
+    .message-wrapper.error { justify-content: center; }
+    .bubble {
+      max-width: 75%;
+      padding: 10px 14px;
+      border-radius: 16px;
+      font-size: 0.9rem;
+      line-height: 1.5;
+    }
+    .bubble.user {
+      background: #378ADD;
+      color: #fff;
+      border-bottom-right-radius: 4px;
+    }
+    .bubble.assistant {
+      background: #fff;
+      color: #333;
+      border-bottom-left-radius: 4px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    }
+    .bubble.assistant p { margin-bottom: 8px; }
+    .bubble.assistant p:last-child { margin-bottom: 0; }
+    .bubble.assistant ul, .bubble.assistant ol { padding-left: 18px; margin-bottom: 8px; }
+    .bubble.assistant li { margin-bottom: 3px; }
+    .bubble.assistant strong { font-weight: 600; }
+    .bubble.error {
+      background: #fff3cd;
+      color: #856404;
+      border-radius: 8px;
+      font-size: 0.85rem;
+    }
+    /* Typing indicator dots */
+    #typing-indicator { margin-bottom: 12px; }
+    .dot {
+      display: inline-block;
+      width: 7px; height: 7px;
+      background: #999;
+      border-radius: 50%;
+      margin: 0 2px;
+      animation: bounce 1.2s infinite;
+    }
+    .dot:nth-child(2) { animation-delay: 0.2s; }
+    .dot:nth-child(3) { animation-delay: 0.4s; }
+    @keyframes bounce {
+      0%, 60%, 100% { transform: translateY(0); }
+      30% { transform: translateY(-6px); }
+    }
+    /* Suggestions */
+    #suggestions {
+      padding: 8px 24px 0;
+      max-width: 800px;
+      width: 100%;
+      margin: 0 auto;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+    #suggestions button {
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 20px;
+      padding: 6px 12px;
+      font-size: 0.78rem;
+      cursor: pointer;
+      color: #555;
+      transition: background 0.15s;
+    }
+    #suggestions button:hover { background: #f0f0f0; }
+    /* Input area wrapper — full width */
+    #input-area-wrapper {
+      background: #fff;
+      border-top: 1px solid #e5e5e5;
+      flex-shrink: 0;
+    }
+    #input-area {
+      padding: 12px 24px 16px;
+      display: flex;
+      gap: 10px;
+      max-width: 800px;
+      width: 100%;
+      margin: 0 auto;
+    }
+    #user-input {
+      flex: 1;
+      padding: 10px 14px;
+      border: 1px solid #ddd;
+      border-radius: 24px;
+      font-size: 0.9rem;
+      outline: none;
+    }
+    #user-input:focus { border-color: #378ADD; }
+    #send-btn {
+      padding: 10px 20px;
+      background: #378ADD;
+      color: #fff;
+      border: none;
+      border-radius: 24px;
+      font-size: 0.9rem;
+      cursor: pointer;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    #send-btn:hover { background: #2a7bc4; }
+    #send-btn:disabled, #user-input:disabled { opacity: 0.6; cursor: not-allowed; }
+    @media (max-width: 600px) {
+      #chat-window, #suggestions { padding: 12px 12px; }
+      #input-area { padding: 10px 12px 12px; }
+      .bubble { max-width: 90%; }
+    }
+  </style>
+</head>
+<body>
+  <!-- dark header -->
+  <header>
+    <div>
+      <h1>🤖 Trip Assistant</h1>
+      <p class="subtitle">Ask me anything about {{ trip_name }}</p>
+    </div>
+  </header>
+
+  <!-- nav bar — same style as other pages -->
+  <nav>
+    <a href="/map">🗺 Map</a>
+    <a href="/itinerary">📅 Itinerary</a>
+    <a href="/docs">📄 Documents</a>
+    <a href="/gallery">📷 Gallery</a>
+    <a href="/chat" class="active">🤖 Ask AI</a>
+  </nav>
+
+  <!-- chat window — fills available height -->
+  <div id="chat-window">
+    <!-- messages appear here -->
+    <div id="messages"></div>
+    <!-- typing indicator (hidden by default) -->
+    <div id="typing-indicator" style="display:none">
+      <div class="bubble assistant">
+        <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- suggestions (shown only before first message) -->
+  <div id="suggestions">
+    <button onclick="sendSuggestion(this)">What should we pack for the Norway fjords?</button>
+    <button onclick="sendSuggestion(this)">Which cruise ports are best for kids?</button>
+    <button onclick="sendSuggestion(this)">What's the stroller situation in Copenhagen?</button>
+    <button onclick="sendSuggestion(this)">When is our cruise balance due?</button>
+    <button onclick="sendSuggestion(this)">What time does our flight to Munich depart?</button>
+  </div>
+
+  <!-- input area — fixed at bottom, full width wrapper -->
+  <div id="input-area-wrapper">
+    <div id="input-area">
+      <input id="user-input" type="text" placeholder="Ask about your trip..." />
+      <button id="send-btn" onclick="sendMessage()">Send</button>
+    </div>
+  </div>
+
+  <script>
+    /* Conversation history maintained in browser */
+    const history = [];
+    let awaitingResponse = false;
+
+    function sendSuggestion(btn) {
+      const text = btn.textContent;
+      document.getElementById('suggestions').style.display = 'none';
+      doSend(text);
+    }
+
+    function sendMessage() {
+      const input = document.getElementById('user-input');
+      const text = input.value.trim();
+      if (!text || awaitingResponse) return;
+      input.value = '';
+      document.getElementById('suggestions').style.display = 'none';
+      doSend(text);
+    }
+
+    document.getElementById('user-input').addEventListener('keydown', e => {
+      if (e.key === 'Enter') sendMessage();
+    });
+
+    function doSend(text) {
+      appendMessage('user', text);
+      setLoading(true);
+
+      fetch('/api/chat', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({message: text, history: history})
+      })
+      .then(r => r.json())
+      .then(data => {
+        setLoading(false);
+        if (data.error) {
+          appendMessage('error', '⚠️ ' + data.error);
+        } else {
+          history.push({role: 'user', content: text});
+          history.push({role: 'assistant', content: data.reply});
+          appendMessage('assistant', data.reply);
+        }
+      })
+      .catch(err => {
+        setLoading(false);
+        appendMessage('error', '⚠️ Network error. Please try again.');
+      });
+    }
+
+    function appendMessage(role, content) {
+      const messages = document.getElementById('messages');
+      const wrapper = document.createElement('div');
+      wrapper.className = 'message-wrapper ' + role;
+
+      const bubble = document.createElement('div');
+      bubble.className = 'bubble ' + role;
+
+      if (role === 'assistant') {
+        bubble.innerHTML = marked.parse(content);
+      } else if (role === 'error') {
+        bubble.textContent = content;
+        bubble.className = 'bubble error';
+      } else {
+        bubble.textContent = content;
+      }
+
+      wrapper.appendChild(bubble);
+      messages.appendChild(wrapper);
+      scrollToBottom();
+    }
+
+    function setLoading(loading) {
+      awaitingResponse = loading;
+      document.getElementById('typing-indicator').style.display = loading ? 'block' : 'none';
+      document.getElementById('send-btn').disabled = loading;
+      document.getElementById('user-input').disabled = loading;
+      if (loading) scrollToBottom();
+    }
+
+    function scrollToBottom() {
+      const win = document.getElementById('chat-window');
+      win.scrollTop = win.scrollHeight;
+    }
+
+    // Pre-fill from URL query param ?q=
+    const urlParams = new URLSearchParams(window.location.search);
+    const preQ = urlParams.get('q');
+    if (preQ) {
+      document.getElementById('user-input').value = preQ;
+      // Auto-send after a short delay so the page renders first
+      setTimeout(() => sendMessage(), 300);
+    }
+  </script>
+</body>
+</html>

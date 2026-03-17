@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gallery — {{ trip_name }}</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #f5f5f0;
+      color: #333;
+      font-size: 15px;
+    }
+
+    /* ── Header ── */
+    header {
+      background: #1a1a2e;
+      color: #fff;
+      padding: 16px 24px;
+    }
+    header h1 {
+      font-size: 1.25rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+    }
+    header .subtitle {
+      font-size: 0.82rem;
+      color: #aaa;
+      margin-top: 3px;
+    }
+
+    /* ── Nav ── */
+    nav {
+      background: #16213e;
+      padding: 8px 24px;
+      display: flex;
+      gap: 20px;
+    }
+    nav a {
+      color: #aaa;
+      text-decoration: none;
+      font-size: 0.85rem;
+    }
+    nav a.active {
+      color: #fff;
+      font-weight: 600;
+    }
+
+    /* ── Leg tabs ── */
+    .leg-tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      padding: 12px 24px;
+      background: #fff;
+      border-bottom: 1px solid #e0e0e0;
+    }
+    .leg-tab {
+      display: inline-block;
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      text-decoration: none;
+      color: #fff;
+      opacity: 0.9;
+      transition: opacity 0.15s;
+    }
+    .leg-tab:hover { opacity: 1; }
+
+    /* ── Main content ── */
+    main {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 28px 16px 48px;
+    }
+
+    /* ── Leg section ── */
+    .leg-section {
+      margin-bottom: 48px;
+    }
+    .leg-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-bottom: 20px;
+      padding-left: 14px;
+      border-left: 5px solid #ccc;
+    }
+    .leg-title.leg-copenhagen_pre { border-left-color: #4a90d9; }
+    .leg-title.leg-cruise          { border-left-color: #f0a500; }
+    .leg-title.leg-austria_flachau { border-left-color: #3aaa5e; }
+    .leg-title.leg-grossarl        { border-left-color: #d4b06a; }
+
+    /* ── Stop section ── */
+    .stop-section {
+      margin-bottom: 28px;
+    }
+    .stop-section h3 {
+      font-size: 1rem;
+      font-weight: 600;
+      color: #444;
+      margin-bottom: 12px;
+    }
+
+    /* ── Photo grid ── */
+    .photo-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+    @media (max-width: 768px) {
+      .photo-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 480px) {
+      .photo-grid { grid-template-columns: 1fr; }
+      main { padding: 16px 8px 32px; }
+      .leg-tabs { padding: 10px 12px; }
+      nav { padding: 8px 12px; }
+    }
+
+    /* ── Photo card ── */
+    .photo-card {
+      aspect-ratio: 4 / 3;
+      overflow: hidden;
+      border-radius: 8px;
+      cursor: pointer;
+      position: relative;
+      background: #e0e0e0;
+    }
+    .photo-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.2s;
+      display: block;
+    }
+    .photo-card:hover img {
+      transform: scale(1.04);
+    }
+    .photo-card .caption {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: linear-gradient(transparent, rgba(0,0,0,0.55));
+      color: #fff;
+      font-size: 0.72rem;
+      padding: 18px 8px 6px;
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+    .photo-card:hover .caption {
+      opacity: 1;
+    }
+
+    /* ── Empty stop ── */
+    .empty-stop {
+      aspect-ratio: 4 / 3;
+      border: 2px dashed #ccc;
+      border-radius: 8px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      color: #bbb;
+      background: #fafafa;
+    }
+    .empty-stop span { font-size: 1.8rem; }
+    .empty-stop p { font-size: 0.82rem; font-weight: 600; color: #aaa; text-align: center; padding: 0 8px; }
+    .empty-stop small { font-size: 0.72rem; color: #bbb; }
+
+    /* ── Lightbox ── */
+    #lightbox {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.92);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+    }
+    #lb-close {
+      position: absolute;
+      top: 16px;
+      right: 24px;
+      background: none;
+      border: none;
+      color: #fff;
+      font-size: 1.8rem;
+      cursor: pointer;
+      line-height: 1;
+      padding: 4px 8px;
+      opacity: 0.8;
+    }
+    #lb-close:hover { opacity: 1; }
+    #lb-prev, #lb-next {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      color: #fff;
+      font-size: 3rem;
+      cursor: pointer;
+      line-height: 1;
+      padding: 8px 16px;
+      opacity: 0.7;
+      user-select: none;
+    }
+    #lb-prev { left: 16px; }
+    #lb-next { right: 16px; }
+    #lb-prev:hover, #lb-next:hover { opacity: 1; }
+    #lb-img {
+      max-width: 90vw;
+      max-height: 80vh;
+      object-fit: contain;
+      border-radius: 8px;
+    }
+    #lb-counter {
+      color: #fff;
+      margin-top: 12px;
+      font-size: 0.85rem;
+      opacity: 0.75;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>📷 {{ trip_name }}</h1>
+    <p class="subtitle">Photo Gallery</p>
+  </header>
+
+  <nav>
+    <a href="/map">🗺 Map</a>
+    <a href="/itinerary">📅 Itinerary</a>
+    <a href="/docs">📄 Documents</a>
+    <a href="/gallery" class="active">📷 Gallery</a>
+  </nav>
+
+  <div class="leg-tabs">
+    {% for leg_id, leg_data in gallery.items() %}
+    {% set leg_colors = {
+      "copenhagen_pre": "#4a90d9",
+      "cruise": "#f0a500",
+      "austria_flachau": "#3aaa5e",
+      "grossarl": "#d4b06a"
+    } %}
+    <a class="leg-tab"
+       href="#leg-{{ leg_id }}"
+       style="background: {{ leg_colors.get(leg_id, '#888') }}">
+      {{ leg_data.name }}
+    </a>
+    {% endfor %}
+  </div>
+
+  <main>
+    {% for leg_id, leg_data in gallery.items() %}
+    {% set sections = leg_data.stops + leg_data.cruise_ports %}
+    <section class="leg-section" id="leg-{{ leg_id }}">
+      <h2 class="leg-title leg-{{ leg_id }}">{{ leg_data.name }}</h2>
+
+      {% for section in sections %}
+      {% set stop_idx = loop.index0 %}
+      {% set section_name = section.name if section.name is defined else section.port %}
+      <div class="stop-section">
+        <h3>{{ section_name }}</h3>
+        <div class="photo-grid">
+          {% if section.photos %}
+            {% for photo in section.photos %}
+            <div class="photo-card" onclick="openLightbox('{{ leg_id }}', {{ stop_idx }}, {{ loop.index0 }})">
+              <img src="{{ photo.url }}" loading="lazy" alt="{{ photo.caption }}">
+              <div class="caption">{{ photo.caption }}</div>
+            </div>
+            {% endfor %}
+          {% else %}
+            <div class="empty-stop">
+              <span>📷</span>
+              <p>{{ section_name }}</p>
+              <small>No photos yet</small>
+            </div>
+          {% endif %}
+        </div>
+      </div>
+      {% endfor %}
+
+      {% if not sections %}
+      <p style="color:#bbb;font-size:0.85rem;font-style:italic">No photo sections configured.</p>
+      {% endif %}
+    </section>
+    {% endfor %}
+  </main>
+
+  <!-- Lightbox overlay -->
+  <div id="lightbox">
+    <button id="lb-close" onclick="closeLightbox()">✕</button>
+    <button id="lb-prev" onclick="lbPrev()">‹</button>
+    <img id="lb-img" src="" alt="">
+    <button id="lb-next" onclick="lbNext()">›</button>
+    <div id="lb-counter"></div>
+  </div>
+
+  <script>
+    const lightboxData = {{ lightbox_data | tojson }};
+
+    let currentLeg, currentStop, currentIdx;
+
+    function openLightbox(legId, stopIdx, photoIdx) {
+      currentLeg = legId;
+      currentStop = String(stopIdx);
+      currentIdx = photoIdx;
+      document.getElementById('lightbox').style.display = 'flex';
+      showPhoto();
+    }
+
+    function showPhoto() {
+      const photos = lightboxData[currentLeg][currentStop];
+      document.getElementById('lb-img').src = photos[currentIdx];
+      document.getElementById('lb-counter').textContent = (currentIdx + 1) + ' / ' + photos.length;
+    }
+
+    function lbNext() {
+      const photos = lightboxData[currentLeg][currentStop];
+      currentIdx = (currentIdx + 1) % photos.length;
+      showPhoto();
+    }
+
+    function lbPrev() {
+      const photos = lightboxData[currentLeg][currentStop];
+      currentIdx = (currentIdx - 1 + photos.length) % photos.length;
+      showPhoto();
+    }
+
+    function closeLightbox() {
+      document.getElementById('lightbox').style.display = 'none';
+    }
+
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') closeLightbox();
+      if (e.key === 'ArrowRight') lbNext();
+      if (e.key === 'ArrowLeft') lbPrev();
+    });
+  </script>
+
+</body>
+</html>

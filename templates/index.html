@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{{ trip_name }}</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #f5f5f0;
+      color: #333;
+      font-size: 15px;
+    }
+
+    header {
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+      color: #fff;
+      padding: 32px 24px 28px;
+      text-align: center;
+    }
+    header h1 {
+      font-size: 1.8rem;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+      margin-bottom: 6px;
+    }
+    header .meta {
+      font-size: 0.9rem;
+      color: #aac4e8;
+      margin-bottom: 4px;
+    }
+    header .travelers {
+      font-size: 0.82rem;
+      color: #7fa8d0;
+    }
+
+    nav {
+      background: #16213e;
+      padding: 8px 24px;
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+    }
+    nav a {
+      color: #aaa;
+      text-decoration: none;
+      font-size: 0.85rem;
+      transition: color 0.15s;
+    }
+    nav a:hover { color: #fff; }
+
+    .countdown-bar {
+      background: #fff;
+      border-bottom: 1px solid #e0e0e0;
+      padding: 10px 24px;
+      text-align: center;
+      font-size: 0.85rem;
+      color: #555;
+    }
+    .countdown-bar strong {
+      color: #1a1a2e;
+    }
+
+    main {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 32px 16px 48px;
+    }
+
+    .section-title {
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #999;
+      margin-bottom: 16px;
+    }
+
+    /* ── Quick-nav tiles ── */
+    .quick-nav {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 12px;
+      margin-bottom: 40px;
+    }
+    @media (max-width: 640px) {
+      .quick-nav { grid-template-columns: repeat(3, 1fr); }
+    }
+    .nav-tile {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      padding: 16px 8px;
+      background: #fff;
+      border-radius: 12px;
+      text-decoration: none;
+      color: #333;
+      border: 1px solid #e8e8e8;
+      transition: box-shadow 0.15s, transform 0.15s;
+    }
+    .nav-tile:hover {
+      box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+      transform: translateY(-2px);
+    }
+    .nav-tile .icon { font-size: 1.6rem; }
+    .nav-tile .label { font-size: 0.78rem; font-weight: 600; color: #555; }
+
+    /* ── Leg cards ── */
+    .leg-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+    }
+    @media (max-width: 640px) {
+      .leg-grid { grid-template-columns: 1fr; }
+    }
+
+    .leg-card {
+      background: #fff;
+      border-radius: 14px;
+      border: 1px solid #e8e8e8;
+      overflow: hidden;
+      text-decoration: none;
+      color: inherit;
+      display: block;
+      transition: box-shadow 0.15s, transform 0.15s;
+    }
+    .leg-card:hover {
+      box-shadow: 0 6px 24px rgba(0,0,0,0.1);
+      transform: translateY(-3px);
+    }
+    .leg-card-accent {
+      height: 6px;
+    }
+    .leg-card-body {
+      padding: 18px 20px 20px;
+    }
+    .leg-type-badge {
+      display: inline-block;
+      font-size: 0.68rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding: 2px 8px;
+      border-radius: 10px;
+      background: #f0f0f0;
+      color: #777;
+      margin-bottom: 8px;
+    }
+    .leg-name {
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin-bottom: 4px;
+      line-height: 1.3;
+    }
+    .leg-dates {
+      font-size: 0.8rem;
+      color: #888;
+      margin-bottom: 10px;
+    }
+    .leg-meta {
+      font-size: 0.82rem;
+      color: #666;
+      line-height: 1.5;
+    }
+    .leg-meta .row {
+      display: flex;
+      align-items: flex-start;
+      gap: 6px;
+      margin-bottom: 4px;
+    }
+    .leg-meta .row .icon { flex-shrink: 0; }
+
+    /* ── Reminders ── */
+    .reminders {
+      margin-top: 32px;
+    }
+    .reminder-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .reminder-item {
+      background: #fff;
+      border-radius: 10px;
+      border: 1px solid #e8e8e8;
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 0.85rem;
+    }
+    .reminder-item.urgent {
+      border-left: 4px solid #e05252;
+      background: #fff8f8;
+    }
+    .reminder-item.soon {
+      border-left: 4px solid #e8882a;
+      background: #fffaf5;
+    }
+    .reminder-item .ri-icon { font-size: 1.2rem; }
+    .reminder-item .ri-text { color: #444; }
+    .reminder-item .ri-date { margin-left: auto; font-size: 0.75rem; color: #999; white-space: nowrap; }
+
+    footer {
+      text-align: center;
+      padding: 24px;
+      font-size: 0.78rem;
+      color: #bbb;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>✈️ {{ trip_name }}</h1>
+    <p class="meta">{{ trip_start }} – {{ trip_end }} &nbsp;·&nbsp; {{ trip_days }} days</p>
+    <p class="travelers">
+      👨‍👩‍👧‍👦
+      {% for t in travelers %}{{ t.name }}{% if not loop.last %}, {% endif %}{% endfor %}
+    </p>
+  </header>
+
+  <nav>
+    <a href="/map">🗺 Map</a>
+    <a href="/itinerary">📅 Itinerary</a>
+    <a href="/docs">📄 Documents</a>
+    <a href="/gallery">📷 Gallery</a>
+    <a href="/chat">🤖 Ask AI</a>
+  </nav>
+
+  <div class="countdown-bar" id="countdown-bar">
+    <span id="countdown-text">Loading...</span>
+  </div>
+
+  <main>
+
+    <p class="section-title">Quick Access</p>
+    <div class="quick-nav">
+      <a class="nav-tile" href="/map">
+        <span class="icon">🗺</span>
+        <span class="label">Map</span>
+      </a>
+      <a class="nav-tile" href="/itinerary">
+        <span class="icon">📅</span>
+        <span class="label">Itinerary</span>
+      </a>
+      <a class="nav-tile" href="/docs">
+        <span class="icon">📄</span>
+        <span class="label">Documents</span>
+      </a>
+      <a class="nav-tile" href="/gallery">
+        <span class="icon">📷</span>
+        <span class="label">Gallery</span>
+      </a>
+      <a class="nav-tile" href="/chat">
+        <span class="icon">🤖</span>
+        <span class="label">Ask AI</span>
+      </a>
+    </div>
+
+    <p class="section-title">Trip Legs</p>
+    <div class="leg-grid">
+      {% for leg in legs %}
+      {% set colors = {
+        "copenhagen_pre": "#378ADD",
+        "cruise": "#E8882A",
+        "austria_flachau": "#3aaa5e",
+        "grossarl": "#C9A84C"
+      } %}
+      {% set color = colors.get(leg.id, "#888888") %}
+      <a class="leg-card" href="/itinerary#leg-{{ leg.id }}">
+        <div class="leg-card-accent" style="background: {{ color }}"></div>
+        <div class="leg-card-body">
+          <div class="leg-type-badge">{{ leg.type | upper }}</div>
+          <div class="leg-name">{{ leg.name }}</div>
+          <div class="leg-dates">
+            {{ leg.dates.start }} – {{ leg.dates.end }}
+          </div>
+          <div class="leg-meta">
+            {% if leg.country %}
+            <div class="row"><span class="icon">📍</span> {{ leg.country }}</div>
+            {% endif %}
+            {% if leg.stay and leg.stay.area %}
+            <div class="row"><span class="icon">🏨</span> {{ leg.stay.area }}</div>
+            {% elif leg.stay and leg.stay.name %}
+            <div class="row"><span class="icon">🏨</span> {{ leg.stay.name }}</div>
+            {% endif %}
+            {% if leg.group and leg.group.notes %}
+            <div class="row"><span class="icon">👥</span> {{ leg.group.notes }}</div>
+            {% endif %}
+            {% if leg.type == "cruise" and leg.booking %}
+            <div class="row"><span class="icon">🚢</span> Cabin {{ leg.booking.cabin }} · {{ leg.booking.category }}</div>
+            {% endif %}
+          </div>
+        </div>
+      </a>
+      {% endfor %}
+    </div>
+
+    {% if reminders %}
+    <div class="reminders">
+      <p class="section-title">Reminders</p>
+      <div class="reminder-list">
+        {% for r in reminders %}
+        <div class="reminder-item {{ r.urgency }}">
+          <span class="ri-icon">{{ r.icon }}</span>
+          <span class="ri-text">{{ r.text }}</span>
+          <span class="ri-date">{{ r.date }}</span>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+    {% endif %}
+
+  </main>
+
+  <footer>{{ trip_name }} · Built with ❤️ for the family</footer>
+
+  <script>
+    const tripStart = new Date("{{ trip_start }}T00:00:00");
+    const now = new Date();
+    const bar = document.getElementById("countdown-text");
+    const diffDays = Math.ceil((tripStart - now) / (1000 * 60 * 60 * 24));
+    if (diffDays > 0) {
+      bar.textContent = `✈️ Departing in ${diffDays} day${diffDays !== 1 ? 's' : ''} · ${tripStart.toLocaleDateString('en-US', {month: 'long', day: 'numeric', year: 'numeric'})}`;
+    } else if (diffDays === 0) {
+      bar.textContent = "🎉 Trip starts TODAY!";
+    } else {
+      const tripEnd = new Date("{{ trip_end }}T00:00:00");
+      if (now <= tripEnd) {
+        bar.textContent = "🌍 Trip is underway — enjoy every moment!";
+      } else {
+        bar.textContent = "🏠 Back home — great memories made!";
+      }
+    }
+  </script>
+
+</body>
+</html>

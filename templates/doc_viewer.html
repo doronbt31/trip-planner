@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{{ doc.label }} — {{ trip_name }}</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #f5f5f0;
+      color: #333;
+      font-size: 15px;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+    }
+
+    header {
+      background: #1a1a2e;
+      color: #fff;
+      padding: 12px 24px;
+      flex-shrink: 0;
+    }
+    header h1 { font-size: 1.1rem; font-weight: 600; letter-spacing: 0.02em; }
+
+    nav {
+      background: #16213e;
+      padding: 8px 24px;
+      display: flex;
+      gap: 20px;
+      flex-shrink: 0;
+    }
+    nav a {
+      color: #aaa;
+      text-decoration: none;
+      font-size: 0.85rem;
+    }
+    nav a:hover { color: #fff; }
+
+    .doc-toolbar {
+      background: #fff;
+      border-bottom: 1px solid #e0e0e0;
+      padding: 10px 24px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      flex-shrink: 0;
+    }
+    .back-link {
+      color: #1a1a2e;
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+    .back-link:hover { text-decoration: underline; }
+
+    .doc-meta {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+      font-size: 0.78rem;
+      color: #666;
+    }
+    .type-badge {
+      display: inline-block;
+      border-radius: 10px;
+      padding: 2px 9px;
+      font-size: 0.68rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #fff;
+    }
+    .type-flight  { background: #378ADD; }
+    .type-cruise  { background: #f0a500; }
+    .type-hotel   { background: #3aaa5e; }
+    .type-other   { background: #9ca3af; }
+
+    .viewer-area {
+      flex: 1;
+      position: relative;
+      min-height: 0;
+    }
+
+    .pdf-iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      display: block;
+    }
+
+    .pdf-fallback {
+      display: none;
+      position: absolute;
+      inset: 0;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 12px;
+      background: #fafafa;
+      color: #888;
+      font-size: 0.9rem;
+      text-align: center;
+      padding: 40px;
+    }
+    .pdf-fallback.visible { display: flex; }
+    .pdf-fallback strong { font-size: 1rem; color: #555; }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>📄 {{ doc.label }}</h1>
+  </header>
+
+  <nav>
+    <a href="/map">🗺 Map</a>
+    <a href="/itinerary">📅 Itinerary</a>
+    <a href="/docs">📄 Documents</a>
+  </nav>
+
+  <div class="doc-toolbar">
+    <a class="back-link" href="/docs">← Back to Documents</a>
+    <div class="doc-meta">
+      <span class="type-badge type-{{ doc.type }}">{{ doc.type }}</span>
+      {% if doc.leg_name %}<span>📍 {{ doc.leg_name }}</span>{% endif %}
+      {% if doc.booking_ref %}<span>🔖 Ref: {{ doc.booking_ref }}</span>{% endif %}
+    </div>
+  </div>
+
+  <div class="viewer-area">
+    {% if doc.file_exists %}
+    <iframe
+      class="pdf-iframe"
+      id="pdf-iframe"
+      src="/api/docs/{{ doc.id }}/file"
+      title="{{ doc.label }}"
+    ></iframe>
+    <div class="pdf-fallback" id="pdf-fallback">
+      <strong>⚠️ Could not display PDF inline</strong>
+      <span>PDF not available — add file to data/docs/</span>
+      <a href="/api/docs/{{ doc.id }}/file" style="color:#378ADD;">Download PDF</a>
+    </div>
+    {% else %}
+    <div class="pdf-fallback visible">
+      <strong>⚠️ File not found</strong>
+      <span>PDF not available — add file to data/docs/</span>
+    </div>
+    {% endif %}
+  </div>
+
+  <script>
+    var iframe = document.getElementById('pdf-iframe');
+    if (iframe) {
+      iframe.addEventListener('error', function() {
+        iframe.style.display = 'none';
+        document.getElementById('pdf-fallback').classList.add('visible');
+      });
+    }
+  </script>
+
+</body>
+</html>

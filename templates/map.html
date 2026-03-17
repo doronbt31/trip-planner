@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{{ trip_name }}</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #f5f5f0;
+      color: #333;
+    }
+
+    header {
+      background: #1a1a2e;
+      color: #fff;
+      padding: 16px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    header h1 {
+      font-size: 1.25rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+    }
+
+    header a {
+      color: #aaa;
+      font-size: 0.85rem;
+      text-decoration: none;
+    }
+
+    .legend {
+      display: flex;
+      gap: 20px;
+      padding: 10px 24px;
+      background: #fff;
+      border-bottom: 1px solid #e0e0e0;
+      flex-wrap: wrap;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 0.82rem;
+      color: #555;
+    }
+
+    .legend-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .map-container {
+      width: 100%;
+      height: calc(100vh - 96px);
+    }
+
+    .map-container iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      display: block;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>🗺 {{ trip_name }}</h1>
+    <a href="/">← Home</a>
+  </header>
+
+  <nav style="background:#16213e;padding:8px 24px;display:flex;gap:20px;">
+    <a href="/map" style="color:#fff;text-decoration:none;font-size:0.85rem;font-weight:600" class="active">🗺 Map</a>
+    <a href="/itinerary" style="color:#aaa;text-decoration:none;font-size:0.85rem">📅 Itinerary</a>
+    <a href="/docs" style="color:#aaa;text-decoration:none;font-size:0.85rem">📄 Documents</a>
+    <a href="/gallery" style="color:#aaa;text-decoration:none;font-size:0.85rem">📷 Gallery</a>
+    <a href="/chat" style="color:#aaa;text-decoration:none;font-size:0.85rem">🤖 Ask AI</a>
+  </nav>
+
+  <div class="legend">
+    <div class="legend-item">
+      <div class="legend-dot" style="background:#4a90d9"></div>
+      Copenhagen (pre-cruise)
+    </div>
+    <div class="legend-item">
+      <div class="legend-dot" style="background:#f0a500"></div>
+      MSC Euribia — Norway Fjords
+    </div>
+    <div class="legend-item">
+      <div class="legend-dot" style="background:#3aaa5e"></div>
+      Flachau, Austria
+    </div>
+    <div class="legend-item">
+      <div class="legend-dot" style="background:#d4b06a"></div>
+      Großarl — Kinderhotel
+    </div>
+  </div>
+
+  <div class="map-container">
+    {{ map_html | safe }}
+  </div>
+
+</body>
+</html>
